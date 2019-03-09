@@ -1,5 +1,15 @@
 #!/usr/bin/env python3
-import tkinter, tkinter.messagebox, tkinter.filedialog
+from __future__ import print_function
+import sys
+if sys.version_info[0] == 2:
+    import Tkinter as tkinter
+    import tkMessageBox as messagebox
+    import tkFileDialog as filedialog
+    tkinter.messagebox = messagebox
+    tkinter.filedialog = filedialog
+else:
+    import tkinter, tkinter.messagebox, tkinter.filedialog
+
 import threading
 import re, os, sys
 
@@ -413,9 +423,16 @@ class xScrolledText(tkinter.Text):
 
         # Copy geometry methods of self.frame without overriding Text
         # methods -- hack!
-        text_meths = vars(tkinter.Text).keys()
-        methods = vars(tkinter.Pack).keys() | vars(tkinter.Grid).keys() | vars(tkinter.Place).keys()
-        methods = methods.difference(text_meths)
+        if sys.version_info[0] == 2:
+            # Add support for Python 2
+            text_meths = vars(tkinter.Text).keys()
+            methods = vars(tkinter.Pack).keys() + vars(tkinter.Grid).keys() + vars(tkinter.Place).keys()
+            methods = set(methods).difference(text_meths)
+        else:
+            # Python 3
+            text_meths = vars(tkinter.Text).keys()
+            methods = vars(tkinter.Pack).keys() | vars(tkinter.Grid).keys() | vars(tkinter.Place).keys()
+            methods = methods.difference(text_meths)
 
         for m in methods:
             if m[0] != '_' and m != 'config' and m != 'configure':
