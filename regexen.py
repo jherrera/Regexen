@@ -389,7 +389,7 @@ accompanying LICENSE.txt file for more information.
                         break
                 self.lblNumEntries['text'] = str(index) + " item(s) found.\n\n"
                 self.showGroups()
-        except re.sre_parse.error as e:
+        except Exception as e:
             # Get last word from e
             # First remove " (line x, column x)" if it exists
             emsg = re.sub(" \(line \d+, column \d+\)$", "", str(e))
